@@ -1,6 +1,6 @@
 call plug#begin()
-Plug ('nvim-lua/plenary.nvim')
-Plug ('nvim-telescope/telescope.nvim')
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'neovim/nvim-lspconfig'
@@ -12,7 +12,7 @@ Plug 'preservim/nerdtree'
 call plug#end()
 
 lua require('config')
-source /Users/anthonydelgado/.config/nvim/coc.vim
+source /home/anthony/.config/nvim/coc.vim
 
 "set foldmethod=expr
 "set foldexpr=nvim_treesitter#foldexpr()
@@ -72,11 +72,14 @@ highlight NonText ctermbg=none
 " You can't stop me
 cmap w!! w !sudo tee %
 
-autocmd vimenter * ++nested colorscheme gruvbox
+inoremap <silent><expr> <TAB>
+        \ coc#pum#visible() ? coc#pum#next(1):
+        \ <SID>check_back_space() ? "\<Tab>" :
+        \ coc#refresh()
 autocmd vimenter * ++nested set number
 autocmd vimenter * ++nested set relativenumber
 autocmd vimenter * ++nested highlight Normal ctermbg=none
-autocmd vimenter 8 ++nested highlight NonText ctermbg=none
+autocmd vimenter * ++nested highlight NonText ctermbg=none
  
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
@@ -130,7 +133,7 @@ nnoremap <Leader>o o<Esc>^Da
 nnoremap <Leader>O O<Esc>^Da
 noremap <space> :
 
-
+autocmd vimenter * ++nested colorscheme gruvbox
 
 
 
