@@ -47,7 +47,8 @@ endif
 
 " Make <CR> auto-select the first completion item and notify coc.nvim to
 " format on enter, <cr> could be remapped by other vim plugin
-inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<C-y>"
+"inoremap <silent><expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<C-y>"
+inoremap <expr> <CR> pumvisible() ? "\<C-Y>" : "\<CR>"
 inoremap <silent><expr> <TAB>
         \ coc#pum#visible() ? coc#pum#next(1):
         \ <SID>check_back_space() ? "\<Tab>" :

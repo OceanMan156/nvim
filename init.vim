@@ -72,10 +72,6 @@ highlight NonText ctermbg=none
 " You can't stop me
 cmap w!! w !sudo tee %
 
-inoremap <silent><expr> <TAB>
-        \ coc#pum#visible() ? coc#pum#next(1):
-        \ <SID>check_back_space() ? "\<Tab>" :
-        \ coc#refresh()
 autocmd vimenter * ++nested set number
 autocmd vimenter * ++nested set relativenumber
 autocmd vimenter * ++nested highlight Normal ctermbg=none
