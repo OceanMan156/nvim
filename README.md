@@ -6,3 +6,16 @@ you need the NVIM 7+
   sudo add-apt-repository ppa:neovim-ppa/stable
   sudo apt-get update
   sudo apt-get install neovim
+
+install pylint locally and generate pylintrc
+  
+  pylint --generate-rcfile > ${HOME}/.pylintrc
+
+edit pylintrc
+
+  extension-pkg-whitelist=cv2
+  argument-naming-style=
+  attr-naming-style=
+  function-naming-style=
+  max-line-length=
+
