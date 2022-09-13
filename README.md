@@ -19,3 +19,4 @@ edit pylintrc
   function-naming-style=
   max-line-length=
 
+https://www.digitalocean.com/community/tutorials/how-to-install-the-anaconda-python-distribution-on-ubuntu-22-04
