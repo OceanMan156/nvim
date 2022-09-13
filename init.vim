@@ -80,6 +80,7 @@ autocmd vimenter * ++nested set number
 autocmd vimenter * ++nested set relativenumber
 autocmd vimenter * ++nested highlight Normal ctermbg=none
 autocmd vimenter * ++nested highlight NonText ctermbg=none
+autocmd vimenter * ++nested colorscheme gruvbox
  
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
@@ -133,7 +134,6 @@ nnoremap <Leader>o o<Esc>^Da
 nnoremap <Leader>O O<Esc>^Da
 noremap <space> :
 
-autocmd vimenter * ++nested colorscheme gruvbox
 
 
 
