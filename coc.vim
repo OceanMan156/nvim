@@ -49,11 +49,10 @@ endif
 " format on enter, <cr> could be remapped by other vim plugin
 "inoremap <silent><expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<C-y>"
 inoremap <expr> <CR> pumvisible() ? "\<C-Y>" : "\<CR>"
-inoremap <silent><expr> <TAB>
+inoremap <expr> <TAB>
         \ coc#pum#visible() ? coc#pum#next(1):
-        \ <SID>check_back_space() ? "\<Tab>" :
+        \ CheckBackspace() ? "\<Tab>" :
         \ coc#refresh()
-inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
