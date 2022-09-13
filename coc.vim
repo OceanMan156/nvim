@@ -53,6 +53,7 @@ inoremap <expr> <TAB>
         \ coc#pum#visible() ? coc#pum#next(1):
         \ CheckBackspace() ? "\<Tab>" :
         \ coc#refresh()
+inoremap <silent><expr> <cr> coc#pum#visible() && coc#pum#info()['index'] != -1 ? coc#pum#confirm() : "\<C-g>u\<CR>"
 
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.

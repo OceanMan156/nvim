@@ -1,3 +1,5 @@
 {
-  "Lua.telemetry.enable": true
+  "Lua.telemetry.enable": true,
+  "pythony.pythonPath": "/home/anthony/.config/nvim/coc-conda.sh",
+  "python.linting.pylintEnabled": true
 }
