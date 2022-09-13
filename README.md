@@ -20,3 +20,4 @@ edit pylintrc
   max-line-length=
 
 https://www.digitalocean.com/community/tutorials/how-to-install-the-anaconda-python-distribution-on-ubuntu-22-04
+https://vi.stackexchange.com/questions/37453/installing-neovim-0-7-on-ubuntu
