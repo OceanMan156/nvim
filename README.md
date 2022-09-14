@@ -7,20 +7,10 @@ you need the NVIM 7+
   sudo apt-get update
   sudo apt-get install neovim
 
-install pylint locally and generate pylintrc
-  
-  pylint --generate-rcfile > ${HOME}/.pylintrc
-
-edit pylintrc
-
-  extension-pkg-whitelist=cv2
-  argument-naming-style=
-  attr-naming-style=
-  function-naming-style=
-  max-line-length=
-
 https://www.digitalocean.com/community/tutorials/how-to-install-the-anaconda-python-distribution-on-ubuntu-22-04
 https://vi.stackexchange.com/questions/37453/installing-neovim-0-7-on-ubuntu
+
+CocInstall coc-pyright
 
 Error issue with pyright and opencv
 # pyright: reportUndefinedVariable=false, reportGeneralTypeIssues=false
