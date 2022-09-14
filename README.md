@@ -21,3 +21,6 @@ edit pylintrc
 
 https://www.digitalocean.com/community/tutorials/how-to-install-the-anaconda-python-distribution-on-ubuntu-22-04
 https://vi.stackexchange.com/questions/37453/installing-neovim-0-7-on-ubuntu
+
+Error issue with pyright and opencv
+# pyright: reportUndefinedVariable=false, reportGeneralTypeIssues=false
