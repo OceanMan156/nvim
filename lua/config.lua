@@ -1,6 +1,6 @@
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all"
-  ensure_installed = { "c","rust","lua","javascript" },
+  ensure_installed = { "c","rust","lua","javascript","html" },
 
   highlight = {
     enable = true,
@@ -12,6 +12,8 @@ require'nvim-treesitter.configs'.setup {
 
 }
 
+local ft_to_parser = require"nvim-treesitter.parsers".filetype_to_parsername
+ft_to_parser.ejs = "html"
 
 if vim.fn.has('nvim-0.5.1') == 1 then
     vim.lsp.handlers['textDocument/codeAction'] = require'lsputil.codeAction'.code_action_handler

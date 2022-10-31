@@ -14,6 +14,7 @@ call plug#end()
 lua require('config')
 source /home/anthony/.config/nvim/coc.vim
 
+au BufNewFile,BufRead *.ejs set filetype=html
 "set foldmethod=expr
 "set foldexpr=nvim_treesitter#foldexpr()
 
