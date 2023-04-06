@@ -2,23 +2,31 @@ call plug#begin()
 Plug ('nvim-lua/plenary.nvim')
 Plug ('nvim-telescope/telescope.nvim')
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'kyazdani42/nvim-web-devicons'
-Plug 'neovim/nvim-lspconfig'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'nvim-tree/nvim-web-devicons'
 Plug 'morhetz/gruvbox'
 Plug 'RishabhRD/popfix'
 Plug 'RishabhRD/nvim-lsputils'
 Plug 'preservim/nerdtree'
+Plug 'rebelot/kanagawa.nvim'
+Plug 'mfussenegger/nvim-dap'
+Plug 'mxsdev/nvim-dap-vscode-js'
+Plug 'ryanoasis/vim-devicons'
+Plug 'PhilRunninger/nerdtree-visual-selection'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'vwxyutarooo/nerdtree-devicons-syntax'
+Plug 'rcarriga/nvim-dap-ui'
+Plug 'romgrk/barbar.nvim'
 call plug#end()
 
 lua require('config')
 source /Users/anthonydelgado/.config/nvim/coc.vim
 
-"set foldmethod=expr
-"set foldexpr=nvim_treesitter#foldexpr()
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
+set foldnestmax=1
 
 let g:loaded_ruby_provider = 0
-
 
 syntax enable                           " Enables syntax highlighing
 set hidden                              " Required to keep multiple buffers open multiple buffers
@@ -55,7 +63,6 @@ set clipboard=unnamedplus               " Copy paste between vim and everything 
 
 au! BufWritePost $MYVIMRC source %      " auto source when writing to init.vm alternatively you can run :source $MYVIMRC
 
-
 " Debuger Configuration
 nnoremap <silent> <F5> <Cmd>lua require'dap'.continue()<CR>
 nnoremap <silent> <F10> <Cmd>lua require'dap'.step_over()<CR>
@@ -66,21 +73,21 @@ nnoremap <silent> <Leader>B <Cmd>lua require'dap'.set_breakpoint(vim.fn.input('B
 nnoremap <silent> <Leader>lp <Cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>
 nnoremap <silent> <Leader>dr <Cmd>lua require'dap'.repl.open()<CR>
 nnoremap <silent> <Leader>dl <Cmd>lua require'dap'.run_last()<CR>
+tnoremap <Esc> <C-\><C-n>
 
 highlight Normal ctermbg=none
 highlight NonText ctermbg=none
-" You can't stop me
-cmap w!! w !sudo tee %
 
-autocmd vimenter * ++nested colorscheme gruvbox
+autocmd vimenter * ++nested colorscheme kanagawa-dragon
 autocmd vimenter * ++nested set number
 autocmd vimenter * ++nested set relativenumber
-autocmd vimenter * ++nested highlight Normal ctermbg=none
-autocmd vimenter 8 ++nested highlight NonText ctermbg=none
+autocmd vimenter * ++nested highlight Normal ctermbg=none guibg=none
+autocmd vimenter + ++nested highlight NonText ctermbg=none 
  
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
 autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
+
 " Find files using Telescope command-line sugar.
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
@@ -129,6 +136,59 @@ nnoremap <C-l> <C-w>l
 nnoremap <Leader>o o<Esc>^Da
 nnoremap <Leader>O O<Esc>^Da
 noremap <space> :
+
+" TABS
+" Move to previous/next
+nnoremap <silent>    <A-,> <Cmd>BufferPrevious<CR>
+nnoremap <silent>    <A-.> <Cmd>BufferNext<CR>
+
+" Re-order to previous/next
+nnoremap <silent>    <A-<> <Cmd>BufferMovePrevious<CR>
+nnoremap <silent>    <A->> <Cmd>BufferMoveNext<CR>
+
+" Goto buffer in position...
+nnoremap <A-1> <Cmd>BufferGoto 1<CR>
+nnoremap <A-2> <Cmd>BufferGoto 2<CR>
+nnoremap <A-3> <Cmd>BufferGoto 3<CR>
+nnoremap <A-4> <Cmd>BufferGoto 4<CR>
+nnoremap <A-5> <Cmd>BufferGoto 5<CR>
+nnoremap <A-6> <Cmd>BufferGoto 6<CR>
+nnoremap <A-7> <Cmd>BufferGoto 7<CR>
+nnoremap <A-8> <Cmd>BufferGoto 8<CR>
+nnoremap <A-9> <Cmd>BufferGoto 9<CR>
+nnoremap <A-0> <Cmd>BufferLast<CR>
+
+" Pin/unpin buffer
+nnoremap <silent>    <A-p> <Cmd>BufferPin<CR>
+
+" Close buffer
+nnoremap <silent>    <A-c> <Cmd>BufferClose<CR>
+" Restore buffer
+nnoremap <silent>    <A-s-c> <Cmd>BufferRestore<CR>
+
+" Wipeout buffer
+"                          :BufferWipeout
+" Close commands
+"                          :BufferCloseAllButCurrent
+"                          :BufferCloseAllButVisible
+"                          :BufferCloseAllButPinned
+"                          :BufferCloseAllButCurrentOrPinned
+"                          :BufferCloseBuffersLeft
+"                          :BufferCloseBuffersRight
+
+" Magic buffer-picking mode
+nnoremap <silent> <C-p>    <Cmd>BufferPick<CR>
+nnoremap <silent> <C-p>    <Cmd>BufferPickDelete<CR>
+
+" Sort automatically by...
+nnoremap <silent> <Space>bb <Cmd>BufferOrderByBufferNumber<CR>
+nnoremap <silent> <Space>bd <Cmd>BufferOrderByDirectory<CR>
+nnoremap <silent> <Space>bl <Cmd>BufferOrderByLanguage<CR>
+nnoremap <silent> <Space>bw <Cmd>BufferOrderByWindowNumber<CR>
+
+" Other:
+" :BarbarEnable - enables barbar (enabled by default)
+" :BarbarDisable - very bad command, should never be used
 
 
 
