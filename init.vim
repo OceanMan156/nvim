@@ -1,6 +1,6 @@
 call plug#begin()
-Plug ('nvim-lua/plenary.nvim')
-Plug ('nvim-telescope/telescope.nvim')
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'nvim-tree/nvim-web-devicons'
@@ -20,11 +20,12 @@ Plug 'romgrk/barbar.nvim'
 call plug#end()
 
 lua require('config')
-source /Users/anthonydelgado/.config/nvim/coc.vim
+source /home/anthony/.config/nvim/coc.vim
 
 set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
 set foldnestmax=1
+au BufNewFile,BufRead *.ejs set filetype=html
 
 let g:loaded_ruby_provider = 0
 
@@ -78,11 +79,19 @@ tnoremap <Esc> <C-\><C-n>
 highlight Normal ctermbg=none
 highlight NonText ctermbg=none
 
+<<<<<<< HEAD
 autocmd vimenter * ++nested colorscheme kanagawa-dragon
 autocmd vimenter * ++nested set number
 autocmd vimenter * ++nested set relativenumber
 autocmd vimenter * ++nested highlight Normal ctermbg=none guibg=none
 autocmd vimenter + ++nested highlight NonText ctermbg=none 
+=======
+autocmd vimenter * ++nested set number
+autocmd vimenter * ++nested set relativenumber
+autocmd vimenter * ++nested highlight Normal ctermbg=none
+autocmd vimenter * ++nested highlight NonText ctermbg=none
+autocmd vimenter * ++nested colorscheme gruvbox
+>>>>>>> 1b85f88a0b7460434d3347e5a140a3d4a29eb8f5
  
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
@@ -189,7 +198,6 @@ nnoremap <silent> <Space>bw <Cmd>BufferOrderByWindowNumber<CR>
 " Other:
 " :BarbarEnable - enables barbar (enabled by default)
 " :BarbarDisable - very bad command, should never be used
-
 
 
 
