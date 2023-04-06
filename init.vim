@@ -20,7 +20,7 @@ Plug 'romgrk/barbar.nvim'
 call plug#end()
 
 lua require('config')
-source /home/anthony/.config/nvim/coc.vim
+source /Users/anthonydelgado/.config/nvim/coc.vim
 
 set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
@@ -79,19 +79,11 @@ tnoremap <Esc> <C-\><C-n>
 highlight Normal ctermbg=none
 highlight NonText ctermbg=none
 
-<<<<<<< HEAD
 autocmd vimenter * ++nested colorscheme kanagawa-dragon
 autocmd vimenter * ++nested set number
 autocmd vimenter * ++nested set relativenumber
 autocmd vimenter * ++nested highlight Normal ctermbg=none guibg=none
 autocmd vimenter + ++nested highlight NonText ctermbg=none 
-=======
-autocmd vimenter * ++nested set number
-autocmd vimenter * ++nested set relativenumber
-autocmd vimenter * ++nested highlight Normal ctermbg=none
-autocmd vimenter * ++nested highlight NonText ctermbg=none
-autocmd vimenter * ++nested colorscheme gruvbox
->>>>>>> 1b85f88a0b7460434d3347e5a140a3d4a29eb8f5
  
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
