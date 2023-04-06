@@ -3,7 +3,7 @@ Install:
     Command Line Tools for Xcode for Mac
     apt install build-essential for Linux
   - Nodejs
-  - Live Grep for telescope (here)[https://github.com/BurntSushi/ripgrep]
+  - Live Grep for telescope [here](https://github.com/BurntSushi/ripgrep)
   - Install Nvim 7+
   
   - Mac install:
