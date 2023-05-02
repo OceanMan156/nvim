@@ -1,3 +1,4 @@
+-- Treesitter Setup
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all"
   ensure_installed = { "c","rust","lua","javascript", "go", "vim" },
@@ -11,7 +12,24 @@ require'nvim-treesitter.configs'.setup {
   },
 
 }
+-- Autoclose Setup
+require("autoclose").setup()
 
+-- Comments Setup
+require("todo-comments").setup{}
+
+-- Cinnamon Scrolling setup
+require('cinnamon').setup {
+  default_keymaps = true,
+  extra_keymaps = true,
+  extended_keymaps = true,
+  override_keymaps = true,
+  centered = true,
+  max_length = 500,
+  scroll_limit = -1,
+}
+
+-- Node Debug Adapter
 local dap = require('dap')
 dap.adapters.node2 = {
   type = 'executable',
@@ -37,6 +55,32 @@ dap.configurations.javascript = {
     processId = require'dap.utils'.pick_process,
   },
 }
+
+-- Go Debug Adapter
+dap.adapters.delve = {
+  type = 'server',
+  port = '${port}',
+  executable = {
+    command = 'dlv',
+    args = {'dap', '-l', '127.0.0.1:${port}'},
+  }
+}
+dap.configurations.go = {
+  {
+    type = 'go';
+    name = 'Main';
+    request = 'launch';
+    program = "${file}";
+  },
+  {
+    type = "delve",
+    name = "Debug",
+    request = "launch",
+    program = "."
+  },
+}
+
+-- Dap UI Setup
 require("dapui").setup()
 local dapui = require("dapui")
 dap.listeners.after.event_initialized["dapui_config"] = function()
@@ -48,6 +92,8 @@ end
 dap.listeners.before.event_exited["dapui_config"] = function()
   dapui.close()
 end
+
+-- Treesitter Setup with ejs files to act as html files
 local ft_to_parser = require"nvim-treesitter.parsers".filetype_to_parsername
 ft_to_parser.ejs = "html"
 
@@ -91,7 +137,7 @@ else
         require('lsputil.symbols').document_handler(nil, result, { bufnr = bufn }, nil)
     end
 
-      vim.lsp.handlers['textDocument/symbol'] = function(_, _, result, _, bufn)
-            require('lsputil.symbols').workspace_handler(nil, result, { bufnr = bufn }, nil)
-          end
-        end
+    vim.lsp.handlers['textDocument/symbol'] = function(_, _, result, _, bufn)
+        require('lsputil.symbols').workspace_handler(nil, result, { bufnr = bufn }, nil)
+    end
+end
