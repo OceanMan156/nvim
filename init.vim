@@ -6,6 +6,12 @@ Plug 'nvim-tree/nvim-web-devicons'
 Plug 'rebelot/kanagawa.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'feline-nvim/feline.nvim'
+Plug 'm4xshen/autoclose.nvim'
+Plug 'f-person/git-blame.nvim'
+
+" Debugging
+Plug 'mfussenegger/nvim-dap'
+Plug 'rcarriga/nvim-dap-ui'
 
 " LSP Support
 Plug 'neovim/nvim-lspconfig'                           " Required
@@ -48,15 +54,14 @@ set updatetime=50
 set clipboard=unnamedplus
 set noshowmode
 set noshowcmd
-set scrolloff=10
+set scrolloff=20
 set nobackup
-set noswapfile
 set colorcolumn=80
 
 au! BufWritePost $MYVIMRC source %
 
 " Telescope
-nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>ff <cmd>Telescope find_files hidden=true<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
@@ -96,3 +101,15 @@ vnoremap > >gv
 
 " NvimTree
 nnoremap <leader>nn <cmd>NvimTreeToggle<cr>
+
+" Debugging
+nnoremap <silent> <F5> <Cmd>lua require'dap'.continue()<CR>
+nnoremap <silent> <F10> <Cmd>lua require'dap'.step_over()<CR>
+nnoremap <silent> <F11> <Cmd>lua require'dap'.step_into()<CR>
+nnoremap <silent> <F12> <Cmd>lua require'dap'.step_out()<CR>
+nnoremap <silent> <Leader>b <Cmd>lua require'dap'.toggle_breakpoint()<CR>
+nnoremap <silent> <Leader>B <Cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>
+nnoremap <silent> <Leader>lp <Cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>
+nnoremap <silent> <Leader>dr <Cmd>lua require'dap'.repl.open()<CR>
+nnoremap <silent> <Leader>dl <Cmd>lua require'dap'.run_last()<CR>
+tnoremap <Esc> <C-\><C-n>
