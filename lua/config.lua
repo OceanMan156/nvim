@@ -2,6 +2,11 @@ vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
 vim.opt.termguicolors = true
+
+-- Auto Pair setup
+require("nvim-autopairs").setup {}
+
+-- Treesitter setup
 require("nvim-tree").setup()
 
 require'nvim-treesitter.configs'.setup {
@@ -9,9 +14,12 @@ require'nvim-treesitter.configs'.setup {
 	 highlight = {enable = true,},
 	 indent = {enable = true,},
 }
+
+-- Status bar setup
 require('feline').setup()
 require('feline').winbar.setup()
 
+-- LSP Config
 local lsp = require('lsp-zero').preset({})
 lsp.ensure_installed ({
    'tsserver',
@@ -24,9 +32,9 @@ end)
 
 -- (Optional) Configure lua language server for neovim
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
-
 lsp.setup()
 
+-- Autocomplete Setup
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
 

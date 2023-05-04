@@ -8,6 +8,9 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'feline-nvim/feline.nvim'
 Plug 'm4xshen/autoclose.nvim'
 Plug 'f-person/git-blame.nvim'
+Plug 'mbbill/undotree'
+Plug 'windwp/nvim-autopairs'
+Plug 'tpope/vim-fugitive'
 
 " Debugging
 Plug 'mfussenegger/nvim-dap'
@@ -59,6 +62,19 @@ set nobackup
 set colorcolumn=80
 
 au! BufWritePost $MYVIMRC source %
+
+" Spotify Stuff
+nnoremap <leader>spn <cmd>silent !source ~/.zshrc && spotify next<cr>
+nnoremap <leader>spp <cmd>silent !source ~/.zshrc && spotify prev<cr>
+nnoremap <leader>sps <cmd>silent !source ~/.zshrc && spotify pause<cr>
+nnoremap <leader>spu <cmd>silent !source ~/.zshrc && spotify vol up<cr>
+nnoremap <leader>spd <cmd>silent !source ~/.zshrc && spotify vol down<cr>
+
+" Git Fugitive
+nnoremap <leader>gs <cmd>Git<CR>
+
+" Undo Tree
+nnoremap <leader>ut <cmd>UndotreeToggle<CR>
 
 " Telescope
 nnoremap <leader>ff <cmd>Telescope find_files hidden=true<cr>
