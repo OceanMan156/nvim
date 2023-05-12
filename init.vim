@@ -11,6 +11,7 @@ Plug 'f-person/git-blame.nvim'
 Plug 'mbbill/undotree'
 Plug 'windwp/nvim-autopairs'
 Plug 'tpope/vim-fugitive'
+Plug 'ms-jpq/lua-async-await', {'branch': 'neo'}
 
 " Debugging
 Plug 'mfussenegger/nvim-dap'
@@ -30,6 +31,7 @@ Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v2.x'}
 call plug#end()
 
 lua require('config')
+lua require('spotify')
 
 highlight Normal ctermbg=none
 highlight NonText ctermbg=none
@@ -129,3 +131,6 @@ nnoremap <silent> <Leader>lp <Cmd>lua require'dap'.set_breakpoint(nil, nil, vim.
 nnoremap <silent> <Leader>dr <Cmd>lua require'dap'.repl.open()<CR>
 nnoremap <silent> <Leader>dl <Cmd>lua require'dap'.run_last()<CR>
 tnoremap <Esc> <C-\><C-n>
+
+" Spotify
+nnoremap <leader>sl <cmd>lua require'spotify'.List()<cr>
