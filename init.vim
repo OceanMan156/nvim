@@ -11,7 +11,6 @@ Plug 'f-person/git-blame.nvim'
 Plug 'mbbill/undotree'
 Plug 'windwp/nvim-autopairs'
 Plug 'tpope/vim-fugitive'
-Plug 'ms-jpq/lua-async-await', {'branch': 'neo'}
 
 " Debugging
 Plug 'mfussenegger/nvim-dap'
@@ -67,10 +66,11 @@ au! BufWritePost $MYVIMRC source %
 
 " Spotify Stuff
 nnoremap <leader>spn <cmd>silent !source ~/.zshrc && spotify next<cr>
-nnoremap <leader>spp <cmd>silent !source ~/.zshrc && spotify prev<cr>
-nnoremap <leader>sps <cmd>silent !source ~/.zshrc && spotify pause<cr>
+nnoremap <leader>spp <cmd>lua require'spotify'.Play()<cr>
+nnoremap <leader>sps <cmd>lua require'spotify'.Pause()<cr>
 nnoremap <leader>spu <cmd>silent !source ~/.zshrc && spotify vol up<cr>
 nnoremap <leader>spd <cmd>silent !source ~/.zshrc && spotify vol down<cr>
+nnoremap <leader>sl <cmd>lua require'spotify'.List()<cr>
 
 " Git Fugitive
 nnoremap <leader>gs <cmd>Git<CR>
@@ -96,6 +96,7 @@ nnoremap <leader>wq <cmd>wq<cr>
 " Window Splitting
 nnoremap <leader>vsp <cmd>vsp<cr>
 nnoremap <leader>sp <cmd>sp<cr>
+nnoremap <leader>nt <cmd>tabnew<cr>
 
 " Term Enter / Exit
 nnoremap <leader>t <cmd>term<cr>
@@ -132,5 +133,6 @@ nnoremap <silent> <Leader>dr <Cmd>lua require'dap'.repl.open()<CR>
 nnoremap <silent> <Leader>dl <Cmd>lua require'dap'.run_last()<CR>
 tnoremap <Esc> <C-\><C-n>
 
-" Spotify
-nnoremap <leader>sl <cmd>lua require'spotify'.List()<cr>
+" Quickly edit/reload this configuration file
+nnoremap gev :e $MYVIMRC<CR>
+nnoremap gvs :so $MYVIMRC<CR>
