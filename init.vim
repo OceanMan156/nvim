@@ -66,9 +66,11 @@ set colorcolumn=80
 au! BufWritePost $MYVIMRC source %
 
 " Spotify Stuff
-nnoremap <leader>spn <cmd>silent !source ~/.zshrc && spotify next<cr>
-nnoremap <leader>spp <cmd>silent !source ~/.zshrc && spotify prev<cr>
-nnoremap <leader>sps <cmd>silent !source ~/.zshrc && spotify pause<cr>
+nnoremap <leader>sl <cmd>lua require'spotify'.List()<cr>
+nnoremap <leader>sps <cmd>lua require'spotify'.Pause()<cr>
+nnoremap <leader>spp <cmd>lua require'spotify'.Play()<cr>
+nnoremap <leader>spn <cmd>lua require'spotify'.Next()<cr>
+nnoremap <leader>sqa <cmd>lua require'spotify'.AddtoQueue()<cr>
 nnoremap <leader>spu <cmd>silent !source ~/.zshrc && spotify vol up<cr>
 nnoremap <leader>spd <cmd>silent !source ~/.zshrc && spotify vol down<cr>
 
@@ -133,4 +135,3 @@ nnoremap <silent> <Leader>dl <Cmd>lua require'dap'.run_last()<CR>
 tnoremap <Esc> <C-\><C-n>
 
 " Spotify
-nnoremap <leader>sl <cmd>lua require'spotify'.List()<cr>
