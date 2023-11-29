@@ -3,7 +3,11 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.1' }
 Plug 'nvim-tree/nvim-tree.lua'
 Plug 'nvim-tree/nvim-web-devicons'
+
+" Colorscheme
 Plug 'rebelot/kanagawa.nvim'
+Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
+
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'feline-nvim/feline.nvim'
 Plug 'm4xshen/autoclose.nvim'
@@ -11,6 +15,7 @@ Plug 'f-person/git-blame.nvim'
 Plug 'mbbill/undotree'
 Plug 'windwp/nvim-autopairs'
 Plug 'tpope/vim-fugitive'
+Plug 'itchyny/calendar.vim'
 
 " Debugging
 Plug 'mfussenegger/nvim-dap'
@@ -27,6 +32,9 @@ Plug 'hrsh7th/cmp-nvim-lsp' " Required
 Plug 'L3MON4D3/LuaSnip'     " Required
 
 Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v2.x'}
+
+" Wiki and Calendar
+Plug 'vimwiki/vimwiki'
 call plug#end()
 
 lua require('config')
@@ -36,10 +44,12 @@ highlight Normal ctermbg=none
 highlight NonText ctermbg=none
 
 autocmd vimenter * ++nested colorscheme kanagawa-dragon
+" autocmd vimenter * ++nested colorscheme catppuccin-frappe
 autocmd vimenter * ++nested set number
 autocmd vimenter * ++nested set relativenumber
 autocmd vimenter * ++nested highlight Normal ctermbg=none guibg=none
 autocmd vimenter * ++nested highlight NonText ctermbg=none
+autocmd BufRead,BufNewFile Jenkinsfile set filetype=groovy
 
 let mapleader = " "
 syntax enable
@@ -64,13 +74,18 @@ set colorcolumn=80
 
 au! BufWritePost $MYVIMRC source %
 
+set nocompatible
+filetype plugin on
+syntax on
+
 " Spotify Stuff
-nnoremap <leader>spn <cmd>silent !source ~/.zshrc && spotify next<cr>
-nnoremap <leader>spp <cmd>lua require'spotify'.Play()<cr>
+nnoremap <leader>sl <cmd>lua require'spotify'.List()<cr>
 nnoremap <leader>sps <cmd>lua require'spotify'.Pause()<cr>
+nnoremap <leader>spp <cmd>lua require'spotify'.Play()<cr>
+nnoremap <leader>spn <cmd>lua require'spotify'.Next()<cr>
+nnoremap <leader>sqa <cmd>lua require'spotify'.AddtoQueue()<cr>
 nnoremap <leader>spu <cmd>silent !source ~/.zshrc && spotify vol up<cr>
 nnoremap <leader>spd <cmd>silent !source ~/.zshrc && spotify vol down<cr>
-nnoremap <leader>sl <cmd>lua require'spotify'.List()<cr>
 
 " Git Fugitive
 nnoremap <leader>gs <cmd>Git<CR>
@@ -79,7 +94,8 @@ nnoremap <leader>gs <cmd>Git<CR>
 nnoremap <leader>ut <cmd>UndotreeToggle<CR>
 
 " Telescope
-nnoremap <leader>ff <cmd>Telescope find_files hidden=true<cr>
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fs <cmd>Telescope find_files hidden=true no_ignore=true<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
@@ -136,3 +152,16 @@ tnoremap <Esc> <C-\><C-n>
 " Quickly edit/reload this configuration file
 nnoremap gev :e $MYVIMRC<CR>
 nnoremap gvs :so $MYVIMRC<CR>
+
+if has("persistent_undo")
+   let target_path = expand('~/.undodir')
+
+    " create the directory and any parent directories
+    " if the location does not exist.
+    if !isdirectory(target_path)
+        call mkdir(target_path, "p", 0700)
+    endif
+
+    let &undodir=target_path
+    set undofile
+endif

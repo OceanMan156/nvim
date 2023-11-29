@@ -8,6 +8,8 @@ local trackUri = {}
 local playlistUri = {}
 local selectedPlaylist
 local tracks
+local devices = {}
+local selectedDevice
 
 local open = false
 local retrived = false
@@ -48,7 +50,7 @@ end
 
 local function Play()
   local token = getAuth()
-  local url = "https://api.spotify.com/v1/me/player/play"
+  local url = "https://api.spotify.com/v1/me/player/play?device_id=" .. selectedDevice
   local res = curl.put(url, {
     headers = {
       Authorization = "Bearer " .. token,
@@ -61,7 +63,7 @@ local function PlayUri(Uri, playlisturi)
   local token = getAuth()
   local jsonUri = {uri = Uri}
   local json = {context_uri = playlisturi, position_ms = 0, offset = jsonUri}
-  local url = "https://api.spotify.com/v1/me/player/play"
+  local url = "https://api.spotify.com/v1/me/player/play?device_id=" .. selectedDevice
   local res = curl.put(url, {
     headers = {
       Authorization = "Bearer " .. token,
@@ -81,6 +83,23 @@ local function Pause()
   })
 end
 
+-- NOT WORKING
+local function AddtoQueue(Uri)
+  local line = vim.trim(vim.api.nvim_get_current_line())
+  if line[1] == "-" then
+    local token = getAuth()
+    local query = {uri = trackUri[vim.trim(line[2])]}
+    local url = "https://api.spotify.com/v1/me/player/queue"
+    local res = curl.post(url, {
+      query = query,
+      headers = {
+        Authorization = "Bearer " .. token,
+      },
+    })
+    print(res.body)
+  end
+end
+
 local function Next()
   local token = getAuth()
   local url = "https://api.spotify.com/v1/me/player/next"
@@ -89,6 +108,30 @@ local function Next()
       Authorization = "Bearer " .. token,
     },
   })
+end
+
+local function getDevices()
+  local token = getAuth()
+  local url = "https://api.spotify.com/v1/me/player/devices"
+  local res = curl.get(url, {
+    headers = {
+      Authorization = "Bearer " .. token,
+    },
+  })
+  local dev = vim.fn.json_decode(res.body)
+  for i, vlaue in ipairs(dev.devices) do
+    devices[dev.devices[i].name] = dev.devices[i].id
+  end
+end
+
+local function ListDevices()
+  vim.api.nvim_buf_set_lines(0,0,0,0,{"    Available Devices"})
+  local index = 1
+  for key, vlaue in pairs(devices) do
+    vim.api.nvim_buf_set_lines(0,index,index,0,{" =: "..key})
+    index = index + 1
+  end
+  vim.api.nvim_buf_set_lines(0,index,index,0,{""})
 end
 
 local function ListSongs(index)
@@ -116,12 +159,16 @@ local function checkEnter(key)
     local line = vim.api.nvim_get_current_line()
     line = vim.split(line,":")
     -- Sending Line Index
-    if vim.trim(line[1]) ~= "-" and not string.match(line[1], "Available Playlists") then
+    if vim.trim(line[1]) ~= "-" and vim.trim(line[1]) ~= "=" and not string.match(line[1], "Available Playlists") then
       selectedPlaylist = vim.trim(line[2])
       ListSongs(tonumber(line[1]))
+      ListDevices()
     end
     if vim.trim(line[1]) == "-" then
       PlayUri(trackUri[vim.trim(line[2])], playlistUri[selectedPlaylist])
+    end
+    if vim.trim(line[1]) == "=" then
+      selectedDevice = devices[vim.trim(line[2])]
     end
   end
 end
@@ -142,6 +189,7 @@ end
 local function List()
   if not retrived then
     getPlaylist()
+    getDevices()
   end
   if open then
     vim.on_key(nil, namespaceid)
@@ -154,9 +202,9 @@ local function List()
     local win = vim.api.nvim_get_current_win()
     vim.api.nvim_win_set_buf(win, buffer)
 
-    local firstLine = "Available Playlists:"
-    vim.api.nvim_buf_set_text(0,0,0,0,0,{firstLine})
-    vim.cmd("center")
+    local firstLine = "    Available Playlists:"
+    vim.api.nvim_buf_set_lines(0,0,0,0,{firstLine})
+    vim.cmd("vertical resize 42")
 
     for index, value in ipairs(playlists.items) do
       local line = " " .. index .. ": " .. playlists.items[index].name
@@ -174,5 +222,6 @@ return {
   Play = Play,
   Pause = Pause,
   Next = Next,
-  List = List
+  List = List,
+  AddtoQueue = AddtoQueue
 }
