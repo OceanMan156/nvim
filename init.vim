@@ -7,6 +7,7 @@ Plug 'nvim-tree/nvim-web-devicons'
 " Colorscheme
 Plug 'rebelot/kanagawa.nvim'
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
+Plug 'nyoom-engineering/oxocarbon.nvim'
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'feline-nvim/feline.nvim'
@@ -43,7 +44,7 @@ lua require('spotify')
 highlight Normal ctermbg=none
 highlight NonText ctermbg=none
 
-autocmd vimenter * ++nested colorscheme kanagawa-dragon
+autocmd vimenter * ++nested colorscheme oxocarbon
 " autocmd vimenter * ++nested colorscheme catppuccin-frappe
 autocmd vimenter * ++nested set number
 autocmd vimenter * ++nested set relativenumber
@@ -86,6 +87,9 @@ nnoremap <leader>spn <cmd>lua require'spotify'.Next()<cr>
 nnoremap <leader>sqa <cmd>lua require'spotify'.AddtoQueue()<cr>
 nnoremap <leader>spu <cmd>silent !source ~/.zshrc && spotify vol up<cr>
 nnoremap <leader>spd <cmd>silent !source ~/.zshrc && spotify vol down<cr>
+
+" Color scheme
+nnoremap <leader>fc <cmd> lua require'colorpicker'.ColorPicker()<cr>
 
 " Git Fugitive
 nnoremap <leader>gs <cmd>Git<CR>
