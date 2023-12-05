@@ -1,6 +1,20 @@
+-- Spotify specific function for operation
 local curl = require("plenary.curl")
 local encodedClient = os.getenv("clientCredentials")
 local clientRefreshtoken = os.getenv("clientRefreshtoken")
+local defaultDeviceName = os.getenv("defaultDeviceName")
+
+-- Telescope imports for floating windows
+local pickers = require "telescope.pickers"
+local finders = require "telescope.finders"
+local actions = require "telescope.actions"
+local action_state = require "telescope.actions.state"
+local conf = require("telescope.config").values
+vim.notify = require("notify")
+local Job = require'plenary.job'
+
+
+-- PLaylist and tract objects
 local playlists
 local playlistId = {}
 local trackUri = {}
@@ -9,13 +23,6 @@ local selectedPlaylist
 local tracks
 local devices = {}
 local selectedDevice
-
-local pickers = require "telescope.pickers"
-local finders = require "telescope.finders"
-local actions = require "telescope.actions"
-local action_state = require "telescope.actions.state"
-local conf = require("telescope.config").values
-
 local retrived = false
 
 local function dump(o)
@@ -30,6 +37,15 @@ local function dump(o)
       return tostring(o)
    end
 end
+
+Job:new({
+  command = 'sleep',
+  args = {'10'},
+  on_exit = function(j, return_val)
+    print(return_val)
+    print(dump(j:result()))
+  end,
+}):start() -- or start()
 
 local function getAuth()
  local url = "https://accounts.spotify.com/api/token"
@@ -51,7 +67,33 @@ local function getAuth()
   return vim.fn.json_decode(res.body).access_token
 end
 
+
+local function getDevices()
+  local token = getAuth()
+  local url = "https://api.spotify.com/v1/me/player/devices"
+  local res = curl.get(url, {
+    headers = {
+      Authorization = "Bearer " .. token,
+    },
+  })
+  local dev = vim.fn.json_decode(res.body)
+  local empty = true
+  for i, _ in ipairs(dev.devices) do
+    devices[dev.devices[i].name] = dev.devices[i].id
+    empty = false
+  end
+
+  if empty then
+    vim.notify("No device found","error")
+  end
+end
+
 local function Play()
+  if devices[defaultDeviceName] == nil then
+    getDevices()
+    selectedDevice = devices[defaultDeviceName]
+  end
+
   local token = getAuth()
   local url = "https://api.spotify.com/v1/me/player/play?device_id=" .. selectedDevice
   local res = curl.put(url, {
@@ -60,6 +102,7 @@ local function Play()
       content_type = "application/json",
     },
   })
+  vim.notify(dump(res))
 end
 
 local function PlayUri(Uri, playlisturi)
@@ -111,20 +154,6 @@ local function Next()
       Authorization = "Bearer " .. token,
     },
   })
-end
-
-local function getDevices()
-  local token = getAuth()
-  local url = "https://api.spotify.com/v1/me/player/devices"
-  local res = curl.get(url, {
-    headers = {
-      Authorization = "Bearer " .. token,
-    },
-  })
-  local dev = vim.fn.json_decode(res.body)
-  for i, _ in ipairs(dev.devices) do
-    devices[dev.devices[i].name] = dev.devices[i].id
-  end
 end
 
 local function ListSongs(index)
@@ -190,7 +219,7 @@ local TeleSongs = function(opts, pl)
 
         if type == "Songs" then
           actions.close(prompt_bufnr)
-          print(val)
+          vim.notify("Playing: " .. val, "info")
           PlayUri(trackUri[val], playlistUri[selectedPlaylist])
         end
       end)

@@ -2,6 +2,24 @@ vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
 vim.opt.termguicolors = true
+-- Notify config
+require("notify").setup({
+   background_colour = "#4F6752",
+   fps = 30,
+   icons = {
+     DEBUG = "",
+     ERROR = "",
+     INFO = "",
+     TRACE = "✎",
+     WARN = ""
+   },
+   level = "INFO",
+   minimum_width = 50,
+   render = "compact",
+   stages = "slide",
+   timeout = 2500,
+   top_down = true
+})
 
 -- Auto Pair setup
 require("nvim-autopairs").setup {}

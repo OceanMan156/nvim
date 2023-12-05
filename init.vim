@@ -21,6 +21,7 @@ Plug 'itchyny/calendar.vim'
 " Debugging
 Plug 'mfussenegger/nvim-dap'
 Plug 'rcarriga/nvim-dap-ui'
+Plug 'rcarriga/nvim-notify'
 
 " LSP Support
 Plug 'neovim/nvim-lspconfig'                           " Required
@@ -49,6 +50,7 @@ autocmd vimenter * ++nested colorscheme oxocarbon
 autocmd vimenter * ++nested set number
 autocmd vimenter * ++nested set relativenumber
 autocmd vimenter * ++nested highlight Normal ctermbg=none guibg=none
+autocmd vimenter * ++nested highlight NormalNC ctermbg=none guibg=none
 autocmd vimenter * ++nested highlight NonText ctermbg=none
 autocmd BufRead,BufNewFile Jenkinsfile set filetype=groovy
 
