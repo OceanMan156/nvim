@@ -1,6 +1,6 @@
 call plug#begin()
 Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.1' }
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.8'}
 Plug 'nvim-tree/nvim-tree.lua'
 Plug 'nvim-tree/nvim-web-devicons'
 
@@ -15,11 +15,6 @@ Plug 'f-person/git-blame.nvim'
 Plug 'mbbill/undotree'
 Plug 'windwp/nvim-autopairs'
 Plug 'tpope/vim-fugitive'
-Plug 'itchyny/calendar.vim'
-
-" Debugging
-Plug 'mfussenegger/nvim-dap'
-Plug 'rcarriga/nvim-dap-ui'
 
 " LSP Support
 Plug 'neovim/nvim-lspconfig'                           " Required
@@ -38,7 +33,6 @@ Plug 'vimwiki/vimwiki'
 call plug#end()
 
 lua require('config')
-lua require('spotify')
 
 highlight Normal ctermbg=none
 highlight NonText ctermbg=none
