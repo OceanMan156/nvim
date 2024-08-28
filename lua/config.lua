@@ -2,9 +2,24 @@ vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
 vim.opt.termguicolors = true
-
--- Auto Pair setup
-require("nvim-autopairs").setup {}
+-- Notify config
+require("notify").setup({
+   background_colour = "#4F6752",
+   fps = 30,
+   icons = {
+     DEBUG = "",
+     ERROR = "",
+     INFO = "",
+     TRACE = "✎",
+     WARN = ""
+   },
+   level = "INFO",
+   minimum_width = 50,
+   render = "compact",
+   stages = "slide",
+   timeout = 2500,
+   top_down = true
+})
 
 -- Treesitter setup
 require("nvim-tree").setup()
@@ -21,8 +36,8 @@ require('feline').winbar.setup()
 
 -- LSP Config
 local lsp = require('lsp-zero').preset({})
-lsp.ensure_installed ({
-})
+
+lsp.ensure_installed ({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -59,4 +74,3 @@ cmp.setup({
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
   }
 })
-

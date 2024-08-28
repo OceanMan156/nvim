@@ -7,14 +7,17 @@ Plug 'nvim-tree/nvim-web-devicons'
 " Colorscheme
 Plug 'rebelot/kanagawa.nvim'
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
+Plug 'nyoom-engineering/oxocarbon.nvim'
+Plug 'rockerBOO/boo-colorscheme-nvim'
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'feline-nvim/feline.nvim'
-Plug 'm4xshen/autoclose.nvim'
 Plug 'f-person/git-blame.nvim'
 Plug 'mbbill/undotree'
-Plug 'windwp/nvim-autopairs'
 Plug 'tpope/vim-fugitive'
+
+" Debugging
+Plug 'rcarriga/nvim-notify'
 
 " LSP Support
 Plug 'neovim/nvim-lspconfig'                           " Required
@@ -37,13 +40,15 @@ lua require('config')
 highlight Normal ctermbg=none
 highlight NonText ctermbg=none
 
-autocmd vimenter * ++nested colorscheme kanagawa-dragon
+autocmd vimenter * ++nested colorscheme kanagawa
 " autocmd vimenter * ++nested colorscheme catppuccin-frappe
 autocmd vimenter * ++nested set number
 autocmd vimenter * ++nested set relativenumber
 autocmd vimenter * ++nested highlight Normal ctermbg=none guibg=none
+autocmd vimenter * ++nested highlight NormalNC ctermbg=none guibg=none
 autocmd vimenter * ++nested highlight NonText ctermbg=none
 autocmd BufRead,BufNewFile Jenkinsfile set filetype=groovy
+autocmd BufRead,BufNewFile Jenkinsfile.* set filetype=groovy
 
 let mapleader = " "
 syntax enable
@@ -77,9 +82,13 @@ nnoremap <leader>sl <cmd>lua require'spotify'.List()<cr>
 nnoremap <leader>sps <cmd>lua require'spotify'.Pause()<cr>
 nnoremap <leader>spp <cmd>lua require'spotify'.Play()<cr>
 nnoremap <leader>spn <cmd>lua require'spotify'.Next()<cr>
-nnoremap <leader>sqa <cmd>lua require'spotify'.AddtoQueue()<cr>
+nnoremap <leader>spa <cmd>lua require'spotify'.AddtoQueue()<cr>
+nnoremap <leader>spt <cmd>lua require'spotify'.CurrentTrack()<cr>
 nnoremap <leader>spu <cmd>silent !source ~/.zshrc && spotify vol up<cr>
 nnoremap <leader>spd <cmd>silent !source ~/.zshrc && spotify vol down<cr>
+
+" Color scheme
+nnoremap <leader>fc <cmd> lua require'colorpicker'.ColorPicker()<cr>
 
 " Git Fugitive
 nnoremap <leader>gs <cmd>Git<CR>
@@ -130,18 +139,6 @@ vnoremap > >gv
 
 " NvimTree
 nnoremap <leader>nn <cmd>NvimTreeToggle<cr>
-
-" Debugging
-nnoremap <silent> <F5> <Cmd>lua require'dap'.continue()<CR>
-nnoremap <silent> <F10> <Cmd>lua require'dap'.step_over()<CR>
-nnoremap <silent> <F11> <Cmd>lua require'dap'.step_into()<CR>
-nnoremap <silent> <F12> <Cmd>lua require'dap'.step_out()<CR>
-nnoremap <silent> <Leader>b <Cmd>lua require'dap'.toggle_breakpoint()<CR>
-nnoremap <silent> <Leader>B <Cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>
-nnoremap <silent> <Leader>lp <Cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>
-nnoremap <silent> <Leader>dr <Cmd>lua require'dap'.repl.open()<CR>
-nnoremap <silent> <Leader>dl <Cmd>lua require'dap'.run_last()<CR>
-tnoremap <Esc> <C-\><C-n>
 
 " Quickly edit/reload this configuration file
 nnoremap gev :e $MYVIMRC<CR>

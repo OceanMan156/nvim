@@ -1,7 +1,20 @@
+-- Spotify specific function for operation
 local curl = require("plenary.curl")
 local encodedClient = os.getenv("clientCredentials")
 local clientRefreshtoken = os.getenv("clientRefreshtoken")
-local namespaceid
+local defaultDeviceName = os.getenv("defaultDeviceName")
+
+-- Telescope imports for floating windows
+local pickers = require "telescope.pickers"
+local finders = require "telescope.finders"
+local actions = require "telescope.actions"
+local action_state = require "telescope.actions.state"
+local conf = require("telescope.config").values
+vim.notify = require("notify")
+local Job = require'plenary.job'
+
+
+-- PLaylist and tract objects
 local playlists
 local playlistId = {}
 local trackUri = {}
@@ -10,10 +23,7 @@ local selectedPlaylist
 local tracks
 local devices = {}
 local selectedDevice
-
-local open = false
 local retrived = false
-local retrivedSongs = false
 
 local function dump(o)
    if type(o) == 'table' then
@@ -27,6 +37,15 @@ local function dump(o)
       return tostring(o)
    end
 end
+
+Job:new({
+  command = 'sleep',
+  args = {'10'},
+  on_exit = function(j, return_val)
+    print(return_val)
+    print(dump(j:result()))
+  end,
+}):start() -- or start()
 
 local function getAuth()
  local url = "https://accounts.spotify.com/api/token"
@@ -48,7 +67,33 @@ local function getAuth()
   return vim.fn.json_decode(res.body).access_token
 end
 
+
+local function getDevices()
+  local token = getAuth()
+  local url = "https://api.spotify.com/v1/me/player/devices"
+  local res = curl.get(url, {
+    headers = {
+      Authorization = "Bearer " .. token,
+    },
+  })
+  local dev = vim.fn.json_decode(res.body)
+  local empty = true
+  for i, _ in ipairs(dev.devices) do
+    devices[dev.devices[i].name] = dev.devices[i].id
+    empty = false
+  end
+
+  if empty then
+    vim.notify("No device found","error")
+  end
+end
+
 local function Play()
+  if devices[defaultDeviceName] == nil then
+    getDevices()
+    selectedDevice = devices[defaultDeviceName]
+  end
+
   local token = getAuth()
   local url = "https://api.spotify.com/v1/me/player/play?device_id=" .. selectedDevice
   local res = curl.put(url, {
@@ -57,6 +102,7 @@ local function Play()
       content_type = "application/json",
     },
   })
+  vim.notify(dump(res))
 end
 
 local function PlayUri(Uri, playlisturi)
@@ -110,67 +156,30 @@ local function Next()
   })
 end
 
-local function getDevices()
+local function ListSongs(index)
+  local sl = {}
+
+  getDevices()
+
   local token = getAuth()
-  local url = "https://api.spotify.com/v1/me/player/devices"
+  local url = "https://api.spotify.com/v1/playlists/" .. playlistId[index] .. "/tracks"
   local res = curl.get(url, {
     headers = {
       Authorization = "Bearer " .. token,
     },
   })
-  local dev = vim.fn.json_decode(res.body)
-  for i, vlaue in ipairs(dev.devices) do
-    devices[dev.devices[i].name] = dev.devices[i].id
-  end
-end
+  tracks = vim.fn.json_decode(res.body)
 
-local function ListDevices()
-  vim.api.nvim_buf_set_lines(0,0,0,0,{"    Available Devices"})
-  local index = 1
-  for key, vlaue in pairs(devices) do
-    vim.api.nvim_buf_set_lines(0,index,index,0,{" =: "..key})
-    index = index + 1
-  end
-  vim.api.nvim_buf_set_lines(0,index,index,0,{""})
-end
-
-local function ListSongs(index)
-  if not retrivedSongs then
-    local token = getAuth()
-    local url = "https://api.spotify.com/v1/playlists/" .. playlistId[index] .. "/tracks"
-    local res = curl.get(url, {
-      headers = {
-        Authorization = "Bearer " .. token,
-      },
-    })
-    tracks = vim.fn.json_decode(res.body)
-    retrivedSongs = true
+  for key, _ in pairs(devices) do
+    table.insert(sl, "Devices: " .. key)
   end
 
-  for i, value in ipairs(tracks.items) do
-    local line = "    -: " .. tracks.items[i].track.name
+  for i, _ in ipairs(tracks.items) do
+    table.insert(sl, "Songs: " .. tracks.items[i].track.name)
     trackUri[tracks.items[i].track.name] = tracks.items[i].track.uri
-    vim.api.nvim_buf_set_lines(0,index+1,index+1,0,{line})
   end
-end
 
-local function checkEnter(key)
-  if string.byte(key) == 13 then
-    local line = vim.api.nvim_get_current_line()
-    line = vim.split(line,":")
-    -- Sending Line Index
-    if vim.trim(line[1]) ~= "-" and vim.trim(line[1]) ~= "=" and not string.match(line[1], "Available Playlists") then
-      selectedPlaylist = vim.trim(line[2])
-      ListSongs(tonumber(line[1]))
-      ListDevices()
-    end
-    if vim.trim(line[1]) == "-" then
-      PlayUri(trackUri[vim.trim(line[2])], playlistUri[selectedPlaylist])
-    end
-    if vim.trim(line[1]) == "=" then
-      selectedDevice = devices[vim.trim(line[2])]
-    end
-  end
+  return sl
 end
 
 -- Get Playlist once rather than everytime
@@ -186,36 +195,72 @@ local function getPlaylist()
     retrived = true
 end
 
+local TeleSongs = function(opts, pl)
+  local songlist = ListSongs(pl)
+  opts = opts or {}
+  pickers.new(opts, {
+    prompt_title = "Songs",
+    finder = finders.new_table {
+      results = songlist
+    },
+    sorter = conf.generic_sorter(opts),
+    attach_mappings = function(prompt_bufnr, map)
+      actions.select_default:replace(function()
+        --actions.close(prompt_bufnr)
+        local selection = action_state.get_selected_entry()
+        local type = vim.split(selection[1], ":")[1]
+        local val = vim.split(selection[1], ":")[2]
+
+        val = vim.trim(val)
+
+        if type == "Devices" then
+          selectedDevice = devices[val]
+        end
+
+        if type == "Songs" then
+          actions.close(prompt_bufnr)
+          vim.notify("Playing: " .. val, "info")
+          PlayUri(trackUri[val], playlistUri[selectedPlaylist])
+        end
+      end)
+      return true
+    end,
+  }):find()
+end
+
+local TelePlaylist = function(opts, pl)
+  opts = opts or {}
+  pickers.new(opts, {
+    prompt_title = "Playlist",
+    finder = finders.new_table {
+      results = pl
+    },
+    sorter = conf.generic_sorter(opts),
+    attach_mappings = function(prompt_bufnr, map)
+      actions.select_default:replace(function()
+        actions.close(prompt_bufnr)
+        local selection = action_state.get_selected_entry()
+        selectedPlaylist = selection[1]
+        TeleSongs(require("telescope.themes").get_dropdown{}, selection[1])
+      end)
+      return true
+    end,
+  }):find()
+end
+
 local function List()
   if not retrived then
     getPlaylist()
     getDevices()
   end
-  if open then
-    vim.on_key(nil, namespaceid)
-    open = false
-    vim.cmd("close")
-  else
+    local pl = {}
 
-    vim.cmd('vsplit')
-    local buffer = vim.api.nvim_create_buf(true, true)
-    local win = vim.api.nvim_get_current_win()
-    vim.api.nvim_win_set_buf(win, buffer)
-
-    local firstLine = "    Available Playlists:"
-    vim.api.nvim_buf_set_lines(0,0,0,0,{firstLine})
-    vim.cmd("vertical resize 42")
-
-    for index, value in ipairs(playlists.items) do
-      local line = " " .. index .. ": " .. playlists.items[index].name
-      playlistId[index] = playlists.items[index].id
+    for index, _ in ipairs(playlists.items) do
+      table.insert(pl, playlists.items[index].name)
+      playlistId[playlists.items[index].name] = playlists.items[index].id
       playlistUri[playlists.items[index].name] = playlists.items[index].uri
-      vim.api.nvim_buf_set_lines(0,index,index,0,{line})
     end
-
-    namespaceid = vim.on_key(checkEnter)
-    open = true
-  end
+    TelePlaylist(require("telescope.themes").get_dropdown{}, pl)
 end
 
 return {
