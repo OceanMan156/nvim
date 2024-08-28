@@ -29,6 +29,8 @@ require'nvim-treesitter.configs'.setup {
 	 highlight = {enable = true,},
 	 indent = {enable = true,},
 }
+-- Autoclose Setup
+require("autoclose").setup()
 
 -- Status bar setup
 require('feline').setup()

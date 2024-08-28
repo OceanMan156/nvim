@@ -102,6 +102,7 @@ nnoremap <leader>fs <cmd>Telescope find_files hidden=true no_ignore=true<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+nnoremap <leader>fd <cmd>TodoTelescope <cr>
 
 " No Escape
 inoremap jk <Esc>
