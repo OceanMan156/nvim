@@ -1,6 +1,6 @@
 call plug#begin()
 Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.4' }
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.8'}
 Plug 'nvim-tree/nvim-tree.lua'
 Plug 'nvim-tree/nvim-web-devicons'
 
@@ -36,7 +36,6 @@ Plug 'vimwiki/vimwiki'
 call plug#end()
 
 lua require('config')
-lua require('spotify')
 
 highlight Normal ctermbg=none
 highlight NonText ctermbg=none

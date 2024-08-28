@@ -25,7 +25,7 @@ require("notify").setup({
 require("nvim-tree").setup()
 
 require'nvim-treesitter.configs'.setup {
-   ensure_installed = { "c", "rust", "lua", "javascript", "go", "vim" },
+   ensure_installed = { "vim" },
 	 highlight = {enable = true,},
 	 indent = {enable = true,},
 }
@@ -36,6 +36,8 @@ require('feline').winbar.setup()
 
 -- LSP Config
 local lsp = require('lsp-zero').preset({})
+
+lsp.ensure_installed ({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
