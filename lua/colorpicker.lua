@@ -3,7 +3,6 @@ local finders = require "telescope.finders"
 local actions = require "telescope.actions"
 local action_state = require "telescope.actions.state"
 local conf = require("telescope.config").values
-local dump = require("dump").print
 
 local getSchemes = function ()
   -- Get Schemes in string and remove brackets

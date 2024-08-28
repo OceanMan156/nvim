@@ -21,9 +21,6 @@ require("notify").setup({
    top_down = true
 })
 
--- Auto Pair setup
-require("nvim-autopairs").setup {}
-
 -- Treesitter setup
 require("nvim-tree").setup()
 
@@ -39,10 +36,6 @@ require('feline').winbar.setup()
 
 -- LSP Config
 local lsp = require('lsp-zero').preset({})
-lsp.ensure_installed ({
-   'tsserver',
-   'gopls'
-})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -79,41 +72,3 @@ cmp.setup({
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
   }
 })
-
--- Go Debug Adapter
-local dap = require('dap')
-dap.adapters.delve = {
-  type = 'server',
-  port = '${port}',
-  executable = {
-    command = 'dlv',
-    args = {'dap', '-l', '127.0.0.1:${port}'},
-  }
-}
-dap.configurations.go = {
-  {
-    type = 'go';
-    name = 'Main';
-    request = 'launch';
-    program = "${file}";
-  },
-  {
-    type = "delve",
-    name = "Debug",
-    request = "launch",
-    program = "."
-  },
-}
-
--- Dap UI Setup
-require("dapui").setup()
-local dapui = require("dapui")
-dap.listeners.after.event_initialized["dapui_config"] = function()
-  dapui.open()
-end
-dap.listeners.before.event_terminated["dapui_config"] = function()
-  dapui.close()
-end
-dap.listeners.before.event_exited["dapui_config"] = function()
-  dapui.close()
-end
