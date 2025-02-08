@@ -31,7 +31,6 @@ vim.keymap.set('n', '<Leader>t', '<Cmd>term<CR>', {silent = true})
 vim.keymap.set('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', {silent = true})
 vim.keymap.set('n', '<Leader>nt', '<Cmd>tabnew<CR>', {silent = true})
 vim.keymap.set('n', '<C-k>', '<Cmd>lua vim.lsp.buf.hover()<CR>', {})
-vim.keymap.set('n', '<Leader>e', '<Cmd>q<CR>', {silent = true})
 
 -- Terminal Mode
 vim.keymap.set('t', '<Esc>', '<C-\\><C-N>', {silent = true})
@@ -48,10 +47,10 @@ vim.keymap.set('i', 'kj', '<Esc>', {})
 -- OS Specific mappings
 if getOS() == "OSX" or getOS() == "Darwin" then
   vim.keymap.set('n', '<Leader>w', '<Cmd>w<CR>', {silent = true})
-  vim.keymap.set('n', '<Leader>q', '<Cmd>bd<CR>', {silent = true})
+  vim.keymap.set('n', '<Leader>q', '<Cmd>q<CR>', {silent = true})
   vim.keymap.set('n', '<Leader>nn', '<Cmd>NvimTreeToggle<CR>', {silent = true})
 else
   vim.keymap.set('n', '<Leader>d', '<Cmd>w<CR>', {silent = true})
-  vim.keymap.set('n', '<Leader>s', '<Cmd>bd<CR>', {silent = true})
+  vim.keymap.set('n', '<Leader>s', '<Cmd>q<CR>', {silent = true})
   vim.keymap.set('n', '<Leader>gg', '<Cmd>NvimTreeToggle<CR>', {silent = true})
 end
