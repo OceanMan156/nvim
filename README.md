@@ -20,7 +20,6 @@ Before installing, make sure your system meets the following requirements:
 ```bash
 # Clone this repo (or your fork) into your Neovim config directory.
 
-```bash
 git clone https://github.com/OceanMan156/nvim.git ~/.config/nvim
 ```
 
