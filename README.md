@@ -24,9 +24,9 @@ Before installing, make sure your system meets the following requirements:
 git clone https://github.com/OceanMan156/nvim.git ~/.config/nvim
 ```
 
-# Run the bootstrap script to install required nvim dependencies
+### Run the bootstrap script to install required nvim dependencies
 
-* Script will also clone and build nvim from source *
+Script will also clone and build nvim from source
 
 ```bash
 cd ~/.config/nvim
