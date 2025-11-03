@@ -19,3 +19,5 @@ vim.cmd [[
   highlight Normal ctermbg=none
   highlight NonText ctermbg=none
 ]]
+
+vim.diagnostic.config({ virtual_lines = true })
