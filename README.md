@@ -1,35 +1,34 @@
-Install: 
-  - gcc compiler
-    - Command Line Tools for Xcode for Mac
-    - apt install build-essential for Linux
-  - Nodejs
-  - Live Grep for telescope [here](https://github.com/BurntSushi/ripgrep)
-  - Install Nvim 7+
-  
-  - Mac install:
-    - homebrew install neovim
+## 🎯 Table of Contents  
+- [Requirements](#requirements)  
+- [Installation](#installation)  
 
-  - Linux install:
-    - sudo apt-get install software-properties-common
-    - sudo add-apt-repository ppa:neovim-ppa/stable
-    - sudo apt-get update
-    - sudo apt-get install neovim
+## Requirements  
+Before installing, make sure your system meets the following requirements:
 
-  - Run PlugInstall
-  - Install coc langauges
-    - coc-clangd: c/c++
-    - coc-json: json
-    - coc-sumneko-lua: lua
-    - coc-tsserver: javascript
-    - coc-snippets
-    - coc-go: go-lang
-    - coc-pyright: python
+### 💻 Optional (Recommended)
+- [**ripgrep (`rg`)**](https://github.com/BurntSushi/ripgrep) – Improves file searching (used by telescope)
+- [**fd**](https://github.com/sharkdp/fd) – Fast and user-friendly alternative to `find`
+- **Node.js** (v16+) – Needed for LSPs and completion plugins (like `mason`)
+- **Python 3** – For Python-based plugins (`:checkhealth` will verify)
+- **npm**, **pip**, or **cargo** – Depending on language servers or tools you install
 
-Usefull Links:
+### 🧠 Developer Tools
+- **LSP servers** – Managed via `mason.nvim` or installed manually  
+- **Formatter/Linter binaries** – e.g., `prettier`, `stylua`, `eslint`, etc. 
 
-  https://www.digitalocean.com/community/tutorials/how-to-install-the-anaconda-python-distribution-on-ubuntu-22-04
-  https://vi.stackexchange.com/questions/37453/installing-neovim-0-7-on-ubuntu
+## Installation  
+```bash
+# Clone this repo (or your fork) into your Neovim config directory.
 
+```bash
+git clone https://github.com/OceanMan156/nvim.git ~/.config/nvim
+```
 
-Error issue with pyright and opencv
-# pyright: reportUndefinedVariable=false, reportGeneralTypeIssues=false
+### Run the bootstrap script to install required nvim dependencies
+
+Script will also clone and build nvim from source
+
+```bash
+cd ~/.config/nvim
+./setup.sh
+```
