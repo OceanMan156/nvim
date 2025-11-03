@@ -10,7 +10,7 @@ else
 fi
 
 echo "Installing NVIM"
-git clone https://github.com/neovim/neovim $HOME/neovim
+git clone https://github.com/neovim/neovim.git $HOME/neovim
 pushd neovim $HOME/neovim
 
 make CMAKE_BUILD_TYPE=Release
